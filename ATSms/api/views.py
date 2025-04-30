@@ -2,10 +2,13 @@ from rest_framework import viewsets, status, generics
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import api_view, permission_classes, action
+import logging
 
 from django.shortcuts import get_object_or_404
 from django.db.models import F, Q
 import random
+
+logger = logging.getLogger(__name__)
 
 from .models import Mentee, Mentor, Mentorship, Resource
 from .serializers import (
@@ -41,16 +44,32 @@ class MenteeSetupView(generics.CreateAPIView):
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+    
+    def perform_create(self, serializer):
+        serializer.save()
+
+class MenteeQuickSetupView(generics.CreateAPIView):
+    serializer_class = MenteeSetupSerializer
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data, context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        mentee = serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 class MentorSetupView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = MentorSetupSerializer
     
-    def create(self, request, *args, **kwargs):
+    def create(self, request):
         serializer = self.get_serializer(data=request.data, context={'request': request})
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+        print(f"Mentor profile saved: {serializer.data}")
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
 
 class MatchMentorView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated, IsMentee]
