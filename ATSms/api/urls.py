@@ -9,7 +9,8 @@ from .views import (
     MatchMentorView,
     TechPathwayView,
     MentorResourceView,
-    MenteeResourceView
+    MenteeResourceView,
+    MenteeQuickSetupView,
 )
 from .ussd import ussd_callback
 from .auth_views import RegisterView
@@ -29,10 +30,13 @@ urlpatterns = [
     path('mentee/language-select/', MenteeLanguageSelectView.as_view(), name='mentee-language-select'),
     path('mentee/setup/', MenteeSetupView.as_view(), name='mentee-setup'),
     path('mentee/tech-pathway/', TechPathwayView.as_view(), name='tech-pathway'),
-    path('mentee/resources/', MenteeResourceView.as_view(), name='mentee-`resources'),
+    path('mentee/resources/', MenteeResourceView.as_view(), name='mentee-resources'),
+    path('mentee/quicksetup/', MenteeQuickSetupView.as_view(), name='mentor-quicksetup'),
+    
     
     # Mentor endpoints
     path('mentor/setup/', MentorSetupView.as_view(), name='mentor-setup'),
+    # path('mentee/quicksetup/', MenteeQuickSetupView.as_view(), name='mentor-quicksetup'),
     
     # Matching endpoint
     path('match-mentor/', MatchMentorView.as_view(), name='match-mentor'),

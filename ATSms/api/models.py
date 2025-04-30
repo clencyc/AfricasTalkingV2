@@ -7,7 +7,7 @@ class UserManager(BaseUserManager):
     def create_user(self, phone=None, email=None, password=None, **extra_fields):
         if not (phone or email):
             raise ValueError('User must have either phone or email')
-        
+
         if email:
             email = self.normalize_email(email)
         
@@ -51,7 +51,7 @@ class Mentee(models.Model):
     
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='mentee_profile')
     name = models.CharField(max_length=100)
-    age = models.PositiveIntegerField()
+    age = models.PositiveIntegerField(null=False, blank=False)
     county = models.CharField(max_length=50)
     language = models.CharField(max_length=5, default='en')  # 'en' or 'sw'
     device = models.CharField(max_length=50)

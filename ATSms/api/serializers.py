@@ -21,7 +21,15 @@ class MenteeLanguageSerializer(serializers.Serializer):
 class MenteeSetupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Mentee
-        fields = ('name', 'age', 'county', 'device', 'interests', 'communication_preference')
+        fields = [
+            'name',
+            'age',
+            'county', 
+            'language',
+            'device', 
+            'interests', 
+            'communication_preference'
+        ]
     
     def create(self, validated_data):
         user = self.context['request'].user
